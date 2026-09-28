@@ -2,19 +2,28 @@ import { Link } from 'react-router-dom';
 
 export default function Footer() {
   return (
-    <footer className="bg-brun text-creme py-12 mt-20">
-      <div className="max-w-6xl mx-auto px-4 grid md:grid-cols-3 gap-10">
+    <footer className="bg-chocolat-900 text-white pt-12 pb-6 mt-20">
+      <div className="max-w-6xl mx-auto px-4 grid md:grid-cols-4 gap-8">
         <div>
-          <h3 className="text-2xl font-serif font-bold mb-3">🥖 Pain-Doré</h3>
-          <p className="text-sm opacity-80 leading-relaxed">
-            Boulangerie artisanale — tradition et savoir-faire transmis depuis 1985.
-            Chaque jour, nos pains sont pétris à la main et cuits au four à bois.
+          <h3 className="text-xl font-serif font-bold mb-3 text-white">🥖 Pain-Doré</h3>
+          <p className="text-sm text-chocolat-200">
+            Boulangerie artisanale — tradition et savoir-faire depuis 1985.
           </p>
         </div>
 
         <div>
-          <h4 className="font-semibold text-lg mb-3">Horaires</h4>
-          <ul className="text-sm opacity-80 space-y-1">
+          <h4 className="font-semibold mb-3 text-white">Navigation</h4>
+          <ul className="text-sm text-chocolat-200 space-y-1">
+            <li><Link to="/" className="hover:text-rouge-500">Accueil</Link></li>
+            <li><Link to="/produits" className="hover:text-rouge-500">Nos Produits</Link></li>
+            <li><Link to="/a-propos" className="hover:text-rouge-500">À propos</Link></li>
+            <li><Link to="/contact" className="hover:text-rouge-500">Contact</Link></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 className="font-semibold mb-3 text-white">Horaires</h4>
+          <ul className="text-sm text-chocolat-200 space-y-1">
             <li>Lun – Ven : 6h30 – 20h</li>
             <li>Samedi : 7h – 20h</li>
             <li>Dimanche : 7h – 13h</li>
@@ -22,25 +31,19 @@ export default function Footer() {
         </div>
 
         <div>
-          <h4 className="font-semibold text-lg mb-3">Contact</h4>
-          <ul className="text-sm opacity-80 space-y-1">
+          <h4 className="font-semibold mb-3 text-white">Contact</h4>
+          <ul className="text-sm text-chocolat-200 space-y-1">
             <li>📍 12 rue du Four, 75011 Paris</li>
             <li>📞 01 23 45 67 89</li>
             <li>✉️ contact@pain-dore.fr</li>
           </ul>
-          <div className="mt-4">
-            <Link
-              to="/contact"
-              className="text-dore hover:text-white underline underline-offset-4"
-            >
-              Nous contacter →
-            </Link>
-          </div>
         </div>
       </div>
 
-      <div className="border-t border-creme/20 mt-10 pt-6 text-center text-xs opacity-60">
-        © {new Date().getFullYear()} Pain-Doré — Tous droits réservés
+      <div className="border-t border-chocolat-700 mt-8 pt-6 text-center">
+        <p className="text-xs text-chocolat-300">
+          © {new Date().getFullYear()} Pain-Doré — Tous droits réservés
+        </p>
       </div>
     </footer>
   );

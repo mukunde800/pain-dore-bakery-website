@@ -1,111 +1,120 @@
-import SectionTitle from '../components/ui/SectionTitle';
-import Card from '../components/ui/Card';
-import Button from '../components/ui/Button';
-
-const values = [
-  {
-    icon: '🌾',
-    title: 'Farines locales',
-    text: 'Nous travaillons avec des moulins de la région Île-de-France.',
-  },
-  {
-    icon: '👐',
-    title: 'Fait main',
-    text: 'Chaque pain est pétri et façonné à la main, sans exception.',
-  },
-  {
-    icon: '🔥',
-    title: 'Four à bois',
-    text: 'Une cuisson traditionnelle qui donne ce goût incomparable.',
-  },
-  {
-    icon: '🌱',
-    title: 'Levain naturel',
-    text: 'Notre levain est entretenu avec passion depuis 1985.',
-  },
-];
+import { Link } from 'react-router-dom';
 
 export default function About() {
+  const valeurs = [
+    {
+      icon: '🌾',
+      title: 'Farines locales',
+      desc: 'Nous travaillons avec des moulins de la région Île-de-France.',
+    },
+    {
+      icon: '👐',
+      title: 'Fait main',
+      desc: 'Pétrissage et façonnage manuels pour chaque produit.',
+    },
+    {
+      icon: '🔥',
+      title: 'Four à bois',
+      desc: 'Cuisson traditionnelle pour une croûte incomparable.',
+    },
+    {
+      icon: '❤️',
+      title: 'Passion',
+      desc: 'Trois générations au service du bon pain.',
+    },
+  ];
+
   return (
     <>
-      <section className="bg-brun text-creme py-20">
+      {/* Hero de page */}
+      <section className="bg-chocolat-800 text-white py-20">
         <div className="max-w-4xl mx-auto px-4 text-center">
-          <p className="text-dore font-semibold tracking-widest uppercase mb-3 text-sm">
-            À propos
-          </p>
-          <h1 className="text-4xl md:text-5xl font-serif font-bold mb-5">
-            Trois générations de boulangers
-          </h1>
-          <p className="text-lg opacity-90 leading-relaxed">
-            De grand-père en petit-fils, la passion du pain se transmet dans la
-            famille Doré. Découvrez notre histoire et nos engagements.
+          <h1 className="text-5xl font-serif font-bold mb-4">À propos</h1>
+          <p className="text-chocolat-100 text-lg">
+            L'histoire d'une famille passionnée par le pain depuis 1985
           </p>
         </div>
       </section>
 
-      <section className="max-w-6xl mx-auto px-4 py-20 grid md:grid-cols-2 gap-12 items-center">
-        <div
-          className="h-80 md:h-[500px] rounded-2xl bg-cover bg-center shadow-xl"
-          style={{
-            backgroundImage:
-              "url('https://images.unsplash.com/photo-1601050690597-df0568f70950?w=800')",
-          }}
+      {/* Histoire */}
+      <section className="max-w-6xl mx-auto px-4 py-16 grid md:grid-cols-2 gap-10 items-center">
+        <img
+          src="https://images.unsplash.com/photo-1509440159596-0249088772ff?w=800"
+          alt="Notre boulangerie"
+          className="rounded-2xl shadow-lg w-full h-96 object-cover"
         />
         <div>
-          <h2 className="text-3xl font-serif font-bold text-brun mb-5">
+          <span className="text-rouge-600 font-semibold uppercase text-sm tracking-wider">
             Notre histoire
+          </span>
+          <h2 className="text-4xl font-serif font-bold text-chocolat-800 mt-2 mb-4">
+            Une tradition familiale
           </h2>
-          <p className="text-gray-600 mb-4 leading-relaxed">
-            En 1985, <strong>Jean Doré</strong> ouvre sa première boulangerie
-            rue du Four, à Paris. Avec sa femme Marie, ils bâtissent
-            patiemment une réputation fondée sur la qualité et l'authenticité.
+          <p className="text-chocolat-700 mb-4">
+            Tout a commencé en 1985, lorsque Marcel Doré a ouvert sa première
+            boulangerie rue du Four, à Paris. Avec sa femme Suzanne, ils ont
+            bâti une réputation sur une seule règle : la qualité avant tout.
           </p>
-          <p className="text-gray-600 mb-4 leading-relaxed">
-            En 2005, leur fils <strong>Pierre</strong> reprend le flambeau et
-            modernise le fournil tout en conservant les recettes familiales.
-            Aujourd'hui, c'est <strong>Lucas</strong>, la troisième génération,
-            qui perpétue ce savoir-faire avec la même exigence.
+          <p className="text-chocolat-700 mb-4">
+            Aujourd'hui, c'est leur petit-fils Antoine qui perpétue le
+            savoir-faire familial, entouré d'une équipe de 8 boulangers
+            passionnés.
           </p>
-          <p className="text-gray-600 leading-relaxed">
-            Notre levain naturel, né en 1985, est toujours vivant et donne à
-            nos pains cette saveur unique que nos clients reconnaissent entre
-            mille.
+          <p className="text-chocolat-700">
+            Chaque jour, plus de 500 pains sortent de notre four à bois,
+            pétris à la main et cuits avec le même amour qu'au premier jour.
           </p>
         </div>
       </section>
 
-      <section className="bg-white py-20">
+      {/* Valeurs */}
+      <section className="bg-chocolat-50 py-16">
         <div className="max-w-6xl mx-auto px-4">
-          <SectionTitle
-            title="Nos engagements"
-            subtitle="Ce qui fait la différence dans chaque bouchée."
-          />
-
+          <h2 className="text-4xl font-serif font-bold text-center text-chocolat-800 mb-12">
+            Nos valeurs
+          </h2>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {values.map((v) => (
-              <Card key={v.title} className="text-center">
+            {valeurs.map(v => (
+              <div
+                key={v.title}
+                className="bg-white rounded-2xl p-6 text-center shadow-sm hover:shadow-lg transition"
+              >
                 <div className="text-4xl mb-3">{v.icon}</div>
-                <h3 className="text-lg font-serif font-bold text-brun mb-2">
+                <h3 className="font-serif font-bold text-chocolat-800 mb-2">
                   {v.title}
                 </h3>
-                <p className="text-sm text-gray-600">{v.text}</p>
-              </Card>
+                <p className="text-sm text-chocolat-500">{v.desc}</p>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="max-w-4xl mx-auto px-4 py-20 text-center">
-        <h2 className="text-3xl font-serif font-bold text-brun mb-5">
-          Venez nous rencontrer
-        </h2>
-        <p className="text-gray-600 mb-8">
-          La meilleure façon de découvrir notre boulangerie, c'est de pousser
-          la porte et de sentir l'odeur du pain chaud.
-        </p>
-        <Button to="/contact" variant="primary">
-          Nous contacter
-        </Button>
+      {/* CTA */}
+      <section className="py-16">
+        <div className="max-w-3xl mx-auto px-4 text-center">
+          <h2 className="text-3xl font-serif font-bold text-chocolat-800 mb-4">
+            Venez nous rendre visite
+          </h2>
+          <p className="text-chocolat-600 mb-6">
+            Notre boutique vous accueille du lundi au dimanche, au cœur du
+            11ᵉ arrondissement de Paris.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link
+              to="/contact"
+              className="bg-rouge-600 hover:bg-rouge-700 text-white font-semibold px-8 py-3 rounded-full transition"
+            >
+              Nous contacter
+            </Link>
+            <Link
+              to="/produits"
+              className="bg-bleu-600 hover:bg-bleu-700 text-white font-semibold px-8 py-3 rounded-full transition"
+            >
+              Voir nos produits
+            </Link>
+          </div>
+        </div>
       </section>
     </>
   );

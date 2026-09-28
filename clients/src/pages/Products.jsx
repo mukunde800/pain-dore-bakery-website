@@ -1,40 +1,32 @@
 import { useState } from 'react';
-import ProductCard from '../components/products/ProductCard';
-import { products } from '../data/products';
+import CategoryFilter from '../components/products/CategoryFilter';
+import ProductGrid from '../components/products/ProductGrid';
+import { products, categories } from '../data/products';
 
 export default function Products() {
-  const categories = ['Tous', 'Pains', 'Viennoiseries', 'Pâtisseries'];
   const [active, setActive] = useState('Tous');
 
-  const filtered = active === 'Tous'
-    ? products
-    : products.filter(p => p.category === active);
+  const filtered =
+    active === 'Tous' ? products : products.filter(p => p.category === active);
 
   return (
     <section className="max-w-6xl mx-auto px-4 py-16">
-      <h1 className="text-4xl font-serif font-bold text-center text-brun mb-8">
-        Nos Produits
-      </h1>
-
-      <div className="flex justify-center flex-wrap gap-3 mb-10">
-        {categories.map(c => (
-          <button
-            key={c}
-            onClick={() => setActive(c)}
-            className={`px-5 py-2 rounded-full font-medium transition ${
-              active === c
-                ? 'bg-dore text-white'
-                : 'bg-white text-brun hover:bg-pain/20'
-            }`}
-          >
-            {c}
-          </button>
-        ))}
+      <div className="text-center mb-12">
+        <h1 className="text-5xl font-serif font-bold text-chocolat-800 mb-3">
+          Nos Produits
+        </h1>
+        <p className="text-chocolat-500">
+          Découvrez toutes nos créations artisanales, préparées chaque jour
+        </p>
       </div>
 
-      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filtered.map(p => <ProductCard key={p.id} product={p} />)}
-      </div>
+      <CategoryFilter
+        categories={categories}
+        active={active}
+        onChange={setActive}
+      />
+
+      <ProductGrid products={filtered} />
     </section>
   );
 }

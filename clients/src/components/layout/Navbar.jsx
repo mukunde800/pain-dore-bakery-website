@@ -5,30 +5,29 @@ export default function Navbar() {
   const [open, setOpen] = useState(false);
 
   const links = [
-    { to: '/',          label: 'Accueil' },
-    { to: '/produits',  label: 'Nos Produits' },
-    { to: '/a-propos',  label: 'À propos' },
-    { to: '/contact',   label: 'Contact' },
+    { to: '/', label: 'Accueil' },
+    { to: '/produits', label: 'Nos Produits' },
+    { to: '/a-propos', label: 'À propos' },
+    { to: '/contact', label: 'Contact' },
   ];
 
   return (
-    <nav className="sticky top-0 z-50 bg-white/95 backdrop-blur shadow-md border-b border-chocolat-100">
+    <nav className="sticky top-0 z-50 bg-white shadow-md border-b-2 border-chocolat-700">
       <div className="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
-        <Link to="/" className="flex items-center gap-2 text-2xl font-serif font-bold text-chocolat-700">
-          <span className="text-3xl">🥖</span>
-          <span>Pain-Doré</span>
+        <Link to="/" className="text-2xl font-serif font-bold text-chocolat-800 flex items-center gap-2">
+          🥖 <span>Pain-Doré</span>
         </Link>
 
-        <ul className="hidden md:flex gap-8 items-center">
+        <ul className="hidden md:flex gap-8">
           {links.map(l => (
             <li key={l.to}>
               <NavLink
                 to={l.to}
                 className={({ isActive }) =>
-                  `font-medium transition-colors ${
+                  `font-medium transition-colors pb-1 ${
                     isActive
-                      ? 'text-rouge border-b-2 border-rouge pb-1'
-                      : 'text-chocolat-700 hover:text-bleu'
+                      ? 'text-rouge-600 border-b-2 border-rouge-600'
+                      : 'text-chocolat-800 hover:text-bleu-600'
                   }`
                 }
               >
@@ -38,8 +37,15 @@ export default function Navbar() {
           ))}
         </ul>
 
+        <Link
+          to="/contact"
+          className="hidden md:inline-block bg-rouge-600 hover:bg-rouge-700 text-white font-semibold px-5 py-2 rounded-full transition"
+        >
+          Commander
+        </Link>
+
         <button
-          className="md:hidden text-3xl text-chocolat-700"
+          className="md:hidden text-2xl text-chocolat-800"
           onClick={() => setOpen(!open)}
           aria-label="Menu"
         >
@@ -48,7 +54,7 @@ export default function Navbar() {
       </div>
 
       {open && (
-        <ul className="md:hidden bg-white px-4 pb-4 space-y-2 border-t border-chocolat-100">
+        <ul className="md:hidden bg-white border-t border-chocolat-200 px-4 pb-4 space-y-2">
           {links.map(l => (
             <li key={l.to}>
               <NavLink
@@ -56,7 +62,7 @@ export default function Navbar() {
                 onClick={() => setOpen(false)}
                 className={({ isActive }) =>
                   `block py-2 font-medium ${
-                    isActive ? 'text-rouge' : 'text-chocolat-700'
+                    isActive ? 'text-rouge-600' : 'text-chocolat-800'
                   }`
                 }
               >
@@ -64,6 +70,15 @@ export default function Navbar() {
               </NavLink>
             </li>
           ))}
+          <li>
+            <Link
+              to="/contact"
+              onClick={() => setOpen(false)}
+              className="block text-center bg-rouge-600 text-white py-2 rounded-full mt-2"
+            >
+              Commander
+            </Link>
+          </li>
         </ul>
       )}
     </nav>

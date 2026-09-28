@@ -1,37 +1,38 @@
-import Button from '../ui/Button';
+import { Link } from 'react-router-dom';
 
 export default function AboutPreview() {
   return (
-    <section className="bg-white py-20">
-      <div className="max-w-6xl mx-auto px-4 grid md:grid-cols-2 gap-12 items-center">
-        <div
-          className="h-80 md:h-96 rounded-2xl bg-cover bg-center shadow-xl"
-          style={{
-            backgroundImage:
-              "url('https://images.unsplash.com/photo-1595475207225-428b62bda831?w=800')",
-          }}
+    <section className="bg-chocolat-50 py-16">
+      <div className="max-w-6xl mx-auto px-4 grid md:grid-cols-2 gap-10 items-center">
+        <img
+          src="https://images.unsplash.com/photo-1568254183919-78a4f43a2877?w=800"
+          alt="Notre boulangerie"
+          className="rounded-2xl shadow-lg w-full h-80 object-cover"
         />
 
         <div>
-          <p className="text-dore font-semibold tracking-widest uppercase mb-3 text-sm">
+          <span className="text-rouge-600 font-semibold uppercase text-sm tracking-wider">
             Notre histoire
-          </p>
-          <h2 className="text-3xl md:text-4xl font-serif font-bold text-brun mb-5">
+          </span>
+          <h2 className="text-4xl font-serif font-bold text-chocolat-800 mt-2 mb-4">
             Un savoir-faire familial
           </h2>
-          <p className="text-gray-600 mb-4 leading-relaxed">
-            Depuis trois générations, la famille Doré perpétue la tradition du
-            pain artisanal. Notre levain naturel, entretenu depuis 1985, donne
-            à nos pains cette saveur unique et cette mie alvéolée.
+          <p className="text-chocolat-700 mb-4">
+            Depuis trois générations, la famille Doré perpétue la tradition
+            boulangère française. Chaque pain est pétri à la main, chaque
+            viennoiserie préparée avec du beurre AOP.
           </p>
-          <p className="text-gray-600 mb-8 leading-relaxed">
-            Chaque jour, nous sélectionnons des farines locales et travaillons
-            avec des producteurs de notre région pour vous offrir le meilleur
-            de l'artisanat français.
+          <p className="text-chocolat-700 mb-6">
+            Notre four à bois, installé en 1985, donne à nos produits cette
+            croûte dorée et ce goût authentique qui fait notre renommée.
           </p>
-          <Button to="/a-propos" variant="primary">
+
+          <Link
+            to="/a-propos"
+            className="inline-block bg-rouge-600 hover:bg-rouge-700 text-white font-semibold px-6 py-3 rounded-full transition"
+          >
             En savoir plus
-          </Button>
+          </Link>
         </div>
       </div>
     </section>
