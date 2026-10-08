@@ -1,5 +1,9 @@
+// test-api.js
 const API_URL = "http://localhost:5000";
 
+// ============================================================
+// Test 1 : GET /
+// ============================================================
 const testRoot = async () => {
   console.log("🔍 Test 1 : GET /");
   try {
@@ -7,13 +11,16 @@ const testRoot = async () => {
     const data = await res.json();
     console.log(`   Status: ${res.status}`);
     console.log(`   Réponse:`, data);
-    return res.status === 200;
+    return res.status === 200 && data.status?.includes("opérationnelle");
   } catch (err) {
     console.error("   ❌ Erreur :", err.message);
     return false;
   }
 };
 
+// ============================================================
+// Test 2 : GET /api/health
+// ============================================================
 const testHealth = async () => {
   console.log("\n🔍 Test 2 : GET /api/health");
   try {
@@ -21,15 +28,45 @@ const testHealth = async () => {
     const data = await res.json();
     console.log(`   Status: ${res.status}`);
     console.log(`   Réponse:`, data);
-    return res.status === 200;
+    return res.status === 200 && data.status === "healthy";
   } catch (err) {
     console.error("   ❌ Erreur :", err.message);
     return false;
   }
 };
 
-const testContact = async () => {
-  console.log("\n🔍 Test 3 : POST /api/contact");
+// ============================================================
+// Test 3 : POST /api/contact (avec "nom" — format du frontend)
+// ============================================================
+const testContactNom = async () => {
+  console.log("\n🔍 Test 3 : POST /api/contact (champ 'nom')");
+  try {
+    const res = await fetch(`${API_URL}/api/contact`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        nom: "Test Node.js",
+        email: "test@example.com",
+        subject: "Test depuis test-api.js",
+        message:
+          "Ceci est un test automatique (champ 'nom'). Si tu reçois ce mail, tout fonctionne ! 🎉",
+      }),
+    });
+    const data = await res.json();
+    console.log(`   Status: ${res.status}`);
+    console.log(`   Réponse:`, data);
+    return res.status === 200 && !!data.success;
+  } catch (err) {
+    console.error("   ❌ Erreur :", err.message);
+    return false;
+  }
+};
+
+// ============================================================
+// Test 4 : POST /api/contact (avec "name" — compatibilité)
+// ============================================================
+const testContactName = async () => {
+  console.log("\n🔍 Test 4 : POST /api/contact (champ 'name')");
   try {
     const res = await fetch(`${API_URL}/api/contact`, {
       method: "POST",
@@ -37,22 +74,25 @@ const testContact = async () => {
       body: JSON.stringify({
         name: "Test Node.js",
         email: "test@example.com",
-        subject: "Test depuis test-api.js",
-        message: "Ceci est un test automatique. Si tu reçois ce mail, tout fonctionne ! 🎉",
+        message:
+          "Ceci est un test automatique (champ 'name'). Compatibilité vérifiée ✅",
       }),
     });
     const data = await res.json();
     console.log(`   Status: ${res.status}`);
     console.log(`   Réponse:`, data);
-    return res.status === 200;
+    return res.status === 200 && !!data.success;
   } catch (err) {
     console.error("   ❌ Erreur :", err.message);
     return false;
   }
 };
 
+// ============================================================
+// Test 5 : POST /api/contact (données invalides → 400)
+// ============================================================
 const testContactInvalid = async () => {
-  console.log("\n🔍 Test 4 : POST /api/contact (données invalides)");
+  console.log("\n🔍 Test 5 : POST /api/contact (données invalides)");
   try {
     const res = await fetch(`${API_URL}/api/contact`, {
       method: "POST",
@@ -62,34 +102,90 @@ const testContactInvalid = async () => {
     const data = await res.json();
     console.log(`   Status: ${res.status} (attendu: 400)`);
     console.log(`   Réponse:`, data);
-    return res.status === 400;
+    return res.status === 400 && !!data.error;
   } catch (err) {
     console.error("   ❌ Erreur :", err.message);
     return false;
   }
 };
 
+// ============================================================
+// Test 6 : POST /api/contact (email invalide seulement → 400)
+// ============================================================
+const testContactBadEmail = async () => {
+  console.log("\n🔍 Test 6 : POST /api/contact (email invalide)");
+  try {
+    const res = await fetch(`${API_URL}/api/contact`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        nom: "Jean Test",
+        email: "email-sans-arobase",
+        message: "Test email invalide",
+      }),
+    });
+    const data = await res.json();
+    console.log(`   Status: ${res.status} (attendu: 400)`);
+    console.log(`   Réponse:`, data);
+    return res.status === 400 && !!data.error;
+  } catch (err) {
+    console.error("   ❌ Erreur :", err.message);
+    return false;
+  }
+};
+
+// ============================================================
+// Test 7 : Route inexistante → 404
+// ============================================================
+const test404 = async () => {
+  console.log("\n🔍 Test 7 : GET /api/inexistant (attendu: 404)");
+  try {
+    const res = await fetch(`${API_URL}/api/inexistant`);
+    const data = await res.json();
+    console.log(`   Status: ${res.status} (attendu: 404)`);
+    console.log(`   Réponse:`, data);
+    return res.status === 404 && !!data.message;
+  } catch (err) {
+    console.error("   ❌ Erreur :", err.message);
+    return false;
+  }
+};
+
+// ============================================================
+// RUNNER
+// ============================================================
 const runAllTests = async () => {
   console.log("═══════════════════════════════════════════");
   console.log("🧪 TESTS DE L'API CONTACT");
+  console.log(`🌐 Cible : ${API_URL}`);
   console.log("═══════════════════════════════════════════\n");
 
   const results = {
-    "GET /": await testRoot(),
-    "GET /api/health": await testHealth(),
-    "POST /api/contact": await testContact(),
+    "GET  /": await testRoot(),
+    "GET  /api/health": await testHealth(),
+    "POST /api/contact (nom)": await testContactNom(),
+    "POST /api/contact (name)": await testContactName(),
     "POST /api/contact (invalide)": await testContactInvalid(),
+    "POST /api/contact (email invalide)": await testContactBadEmail(),
+    "GET  /api/inexistant (404)": await test404(),
   };
 
   console.log("\n═══════════════════════════════════════════");
   console.log("📊 RÉSULTATS");
   console.log("═══════════════════════════════════════════");
+
   Object.entries(results).forEach(([name, success]) => {
     console.log(`${success ? "✅" : "❌"} ${name}`);
   });
-  console.log("═══════════════════════════════════════════");
 
-  const allPassed = Object.values(results).every(Boolean);
+  const passed = Object.values(results).filter(Boolean).length;
+  const total = Object.values(results).length;
+
+  console.log("───────────────────────────────────────────");
+  console.log(`   ${passed}/${total} tests réussis`);
+  console.log("═══════════════════════════════════════════\n");
+
+  const allPassed = passed === total;
   process.exit(allPassed ? 0 : 1);
 };
 

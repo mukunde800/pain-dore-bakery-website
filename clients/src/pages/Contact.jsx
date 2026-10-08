@@ -1,19 +1,70 @@
 import { useState } from 'react';
 
-export default function Contact() {
-  const [form, setForm] = useState({ nom: '', email: '', message: '' });
-  const [sent, setSent] = useState(false);
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
-  const handleChange = e =>
+export default function Contact() {
+  const [form, setForm] = useState({ nom: '', email: '', sujet: '', message: '' });
+  const [sent, setSent] = useState(false);
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
 
-  const handleSubmit = e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Ici tu peux brancher Formspree / EmailJS
-    console.log(form);
-    setSent(true);
-    setForm({ nom: '', email: '', message: '' });
-    setTimeout(() => setSent(false), 4000);
+    setLoading(true);
+    setError('');
+    setSent(false);
+
+    // Timeout de sécurité : si le serveur ne répond pas en 15s, on abandonne
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 15000);
+
+    try {
+      const res = await fetch(`${API_URL}/api/contact`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          nom: form.nom,
+          email: form.email,
+          subject: form.sujet,
+          message: form.message,
+        }),
+        signal: controller.signal,
+      });
+
+      clearTimeout(timeoutId);
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error || "Erreur lors de l'envoi");
+      }
+
+      setSent(true);
+      setForm({ nom: '', email: '', sujet: '', message: '' });
+      setTimeout(() => setSent(false), 5000);
+    } catch (err) {
+      clearTimeout(timeoutId);
+      console.error("Erreur envoi formulaire :", err);
+
+      // 🎯 Messages d'erreur clairs selon le type d'erreur
+      let message = "Erreur réseau. Réessayez plus tard.";
+
+      if (err.name === "AbortError") {
+        message = "Le serveur met trop de temps à répondre. Réessayez.";
+      } else if (err.message === "Failed to fetch") {
+        message = `Impossible de contacter le serveur (${API_URL}). Vérifie que le backend est bien démarré.`;
+      } else if (err.message) {
+        message = err.message;
+      }
+
+      setError(message);
+      setTimeout(() => setError(''), 7000);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -91,6 +142,12 @@ export default function Contact() {
             </div>
           )}
 
+          {error && (
+            <div className="bg-rouge-600 text-white p-3 rounded-lg mb-4 text-sm">
+              ❌ {error}
+            </div>
+          )}
+
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-chocolat-700 mb-1">
@@ -122,6 +179,19 @@ export default function Contact() {
 
             <div>
               <label className="block text-sm font-medium text-chocolat-700 mb-1">
+                Sujet <span className="text-chocolat-400">(optionnel)</span>
+              </label>
+              <input
+                type="text"
+                name="sujet"
+                value={form.sujet}
+                onChange={handleChange}
+                className="w-full px-4 py-2 rounded-lg border-2 border-chocolat-200 focus:border-rouge-500 focus:outline-none bg-white"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-chocolat-700 mb-1">
                 Message
               </label>
               <textarea
@@ -136,9 +206,10 @@ export default function Contact() {
 
             <button
               type="submit"
-              className="w-full bg-rouge-600 hover:bg-rouge-700 text-white font-semibold py-3 rounded-full transition"
+              disabled={loading}
+              className="w-full bg-rouge-600 hover:bg-rouge-700 disabled:opacity-60 disabled:cursor-not-allowed text-white font-semibold py-3 rounded-full transition"
             >
-              Envoyer le message
+              {loading ? 'Envoi en cours…' : 'Envoyer le message'}
             </button>
           </form>
         </div>
